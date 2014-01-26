@@ -2,6 +2,7 @@ var util = require('util');
 var cheerio = require('cheerio');
 var Transform = require('stream').Transform;
 var assert = require('assert');
+var Minimize = require('minimize');
 
 function HtmlFilterApplier(options) {
   Transform.call(this);
@@ -12,9 +13,22 @@ function HtmlFilterApplier(options) {
   this.filters = [];
 
   var originalEmit = this.emit;
+  var minimize = (options.minimize ? new Minimize({}) : false);
   this.emit = function(event) {
     if (event === 'end') {
-      originalEmit.call(this, 'data', this.applyFilters(), this.charset);
+      if (minimize) {
+        minimize.parse(this.applyFilters(), function (error, data) {
+          if (error) {
+            originalEmit.call(this, 'error', error);
+          }
+          else {
+            originalEmit.call(this, 'data', data, this.charset);
+          }
+        }.bind(this));
+      }
+      else {
+        originalEmit.call(this, 'data', this.applyFilters(), this.charset);
+      }
     }
     originalEmit.apply(this, arguments);
   };
