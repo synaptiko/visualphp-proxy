@@ -1,0 +1,18 @@
+{
+  "name": "visualphp-proxy",
+  "description": "Simple HTTP proxy for easier development of javascripts for VisualPHP",
+  "version": "0.0.1",
+  "private": true,
+  "author": "Jiri Prokop <jiri-prokop@synaptiko.cz>",
+  "repository": {
+    "type": "git",
+    "url": "git@github.com:synaptiko/visualphp-proxy.git"
+  },
+  "main": "./index.js",
+  "dependencies": {
+    "cheerio": "~0.13.1"
+  },
+  "engines": {
+    "node": ">=0.10"
+  }
+}
